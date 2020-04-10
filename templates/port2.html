@@ -1,0 +1,86 @@
+{% extends "port1.html" %}
+{% load static %}
+{% block form %}
+           <div style="position: relative;top: 20px;left: 20px">
+           <span>{{ error_message }}</span>
+            <form class="form-inline" action="{% url 'Rank:get_rank' %}" method="get" >
+                     <div class="form-group">
+                        <label for="exampleInputName2">选择您的客户端</label>
+                         <select name="client">
+                             {% for user in users_options %}
+                             <option value="{{ user.client }}">
+                                 {{ user.client }}
+                             </option>
+                             {% endfor %}
+                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName2">start num</label>
+                        <input type="text" class="form-control" id="exampleInputName2" name="start_num" placeholder="start num">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail2">end num</label>
+                        <input type="text" class="form-control" id="exampleInputEmail2" name="end_num"
+                               placeholder="end num<">
+                    </div>
+                    <button type="submit" class="btn btn-default">查询</button>
+                </form>
+           </button>
+                </form>
+
+            </div>
+        <div class="rank-list">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>名次</th>
+                    <th>客户端号</th>
+                    <th>分数</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    {% if forloop.counter|divisibleby:2 == 0 %}
+                        <tr class="active">
+                            <td>
+                                {{ forloop.counter|add:start }}
+                            </td>
+                            <td>
+                                客户端{{ user.pk }}
+                            </td>
+                            <td>
+                                {{ user.score }}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="info">
+                            <td>
+                                {{ forloop.counter|add:start }}
+                            </td>
+                            <td>
+                                客户端{{ user.pk }}
+                            </td>
+                            <td>
+                                {{ user.score }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                {% if self %}
+                           <tr class="success">
+                            <td>
+                                {{ seq }}
+                            </td>
+                            <td>
+                                客户端{{ self.pk }}
+                            </td>
+                            <td>
+                                {{ self.score }}
+                            </td>
+                        </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    <span style="position:relative;top:50px;left:400px;font-size: 20px">共有{{ user_count }}个客户端</span>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% load  static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'rank_create.css' %}">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.css' %}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="center-form">
+    {% block form %}
+        <div>
+            <h4 style="position: relative;left: 50px;top: 20px">提交您的分数</h4>
+            <span style="position: relative;left:200px">{{ error_message }}<br></span>
+            <form class="form-inline" method="post" style="display: inline-block;position: relative;left: 200px">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    客户端{{ form.client }}
+                </div>
+                <div class="form-group">
+                    分数:{{ form.score }}
+                </div>
+
+                <button type="submit" class="btn btn-default">添加</button>
+            </form>
+
+          </div>
+            <div style="position: relative;top: 20px;left: 50px">
+                <h4>查询排名</h4>
+                <form class="form-inline" action="{% url 'Rank:get_rank' %}" method="get" >
+                     <div class="form-group">
+                        <label for="exampleInputName2">选择您的客户端</label>
+                         <select name="client">
+                             {% for user in users_options %}
+                             <option value="{{ user.client }}">
+                                 {{ user.client }}
+                             </option>
+                             {% endfor %}
+                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName2">start num</label>
+                        <input type="text" class="form-control" id="exampleInputName2" name="start_num" placeholder="start num">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail2">end num</label>
+                        <input type="text" class="form-control" id="exampleInputEmail2" name="end_num"
+                               placeholder="end num<">
+                    </div>
+                    <button type="submit" class="btn btn-default">查询</button>
+                </form>
+            </div>
+
+        <div class="rank-list">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>名次</th>
+                    <th>客户端号</th>
+                    <th>分数</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    {% if forloop.counter|divisibleby:2 == 0 %}
+                        <tr class="active">
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+                            <td>
+                                客户端{{ user.pk }}
+                            </td>
+                            <td>
+                                {{ user.score }}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="info">
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+                            <td>
+                                客户端{{ user.pk }}
+                            </td>
+                            <td>
+                                {{ user.score }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        </div>
+ {% endblock %}
+
+
+</body>
+</html>
